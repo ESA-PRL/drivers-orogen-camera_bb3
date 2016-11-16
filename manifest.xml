@@ -1,0 +1,22 @@
+<package>
+  <description brief="Deinterlacing of bumblebee3 frames">
+	Read one stereo frame per updateHook in the input port (use camera_firewire component to retrieve frames from camera before),
+      de-interlace and output both separate images in different output ports.
+  </description>
+  <author>Martin Azkarate/Martin.Azkarate@esa.int</author>
+  <maintainer>Karl Kangur/Karl.Kangur@esa.int</maintainer>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <!--
+   To add any dependencies use the depend tag
+  <depend package="dummy-dependency-0" />
+	...
+  <depend package="dummy-dependency-n-1" />
+  <depend package="dummy-dependency-n" />
+  -->
+  <depend package="drivers/orogen/camera_firewire" />
+  <depend package="perception/frame_helper" />
+
+</package>
