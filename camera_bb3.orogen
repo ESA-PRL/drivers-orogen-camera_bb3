@@ -28,16 +28,16 @@ task_context "Task" do
 
     # A configuration property (here, a std::string). Its value can be retrieved
     # in the C++ code with # _config_value.get() and _config_value.set(new_value).
-    property("calibration_parameters_left_right","frame_helper/StereoCalibration").
-         doc 'Intrinsic and extrinsic camera calibration parameters'+
+    property("calibration_parameters_left","frame_helper/CameraCalibration").
+         doc 'Intrinsic camera calibration parameters'+
             'for a full parameter list have a look at frame_helper'
 
-    property("calibration_parameters_left_center","frame_helper/StereoCalibration").
-         doc 'Intrinsic and extrinsic camera calibration parameters'+
+    property("calibration_parameters_center","frame_helper/CameraCalibration").
+         doc 'Intrinsic camera calibration parameters'+
             'for a full parameter list have a look at frame_helper'
 
-    property("calibration_parameters_center_right","frame_helper/StereoCalibration").
-         doc 'Intrinsic and extrinsic camera calibration parameters'+
+    property("calibration_parameters_right","frame_helper/CameraCalibration").
+         doc 'Intrinsic camera calibration parameters'+
             'for a full parameter list have a look at frame_helper'
 
     property("output_format", "/base/samples/frame/frame_mode_t", :MODE_GRAYSCALE).

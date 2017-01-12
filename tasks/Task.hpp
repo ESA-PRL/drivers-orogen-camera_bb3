@@ -1,9 +1,18 @@
-/* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
-
 #ifndef CAMERA_BB3_TASK_TASK_HPP
 #define CAMERA_BB3_TASK_TASK_HPP
 
+#include <base/Time.hpp>
+
 #include "camera_bb3/TaskBase.hpp"
+#include "frame_helper/FrameHelper.h"
+
+#include <Eigen/Geometry> /** Quaternion, Angle-Axis,...*/
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/calib3d/calib3d.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
 
 namespace camera_bb3 {
 
@@ -11,15 +20,12 @@ namespace camera_bb3 {
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
      * In order to modify the interfaces you should (re)use oroGen and rely on the associated workflow.
-     * Declare a new task context (i.e., a component)
-
-The corresponding C++ class can be edited in tasks/Task.hpp and
-tasks/Task.cpp, and will be put in the camera_bb3 namespace.
+     * 
      * \details
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','camera_bb3::Task')
+         task('custom_task_name','camera_bb2::Task')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument. 
@@ -29,7 +35,21 @@ tasks/Task.cpp, and will be put in the camera_bb3 namespace.
 	friend class TaskBase;
     protected:
 
+        /******************************************/
+        /*** General Internal Storage Variables ***/
+        /******************************************/
+        unsigned int index_frame;                       //! Indexing of the frames processed
+        frame_helper::FrameHelper frameHelperLeft, frameHelperRight, frameHelperCenter;         //! Used for frames conversion&undistortion
+        frame_helper::CameraCalibration camera_calibration_left; //! Calibration parameters of left camera
+        frame_helper::CameraCalibration camera_calibration_center; //! Calibration parameters of center camera
+        frame_helper::CameraCalibration camera_calibration_right; //! Calibration parameters of right camera
 
+        /***************************/
+        /** Output Port Variables  **/
+        /***************************/
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame_left;   //! De-interlaced left frame
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame_right;  //! De-interlaced right frame
+        RTT::extras::ReadOnlyPointer<base::samples::frame::Frame> frame_center;  //! De-interlaced right frame
 
     public:
         /** TaskContext constructor for Task
@@ -48,6 +68,13 @@ tasks/Task.cpp, and will be put in the camera_bb3 namespace.
         /** Default deconstructor of Task
          */
 	~Task();
+
+        /** Function to separate the left and right images from the input port stereo frame
+         * \param input Frame read at the input port. Stereo Interlaced
+         * \param left De-Interlaced left frame
+         * \param right De-Interlaced right frame
+         */
+        void deInterlace(const base::samples::frame::Frame &input, base::samples::frame::Frame &left, base::samples::frame::Frame &right, base::samples::frame::Frame &center);
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
