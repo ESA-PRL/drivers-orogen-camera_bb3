@@ -16,7 +16,7 @@
   <depend package="dummy-dependency-n-1" />
   <depend package="dummy-dependency-n" />
   -->
-  <depend package="drivers/orogen/camera_firewire" />
+  <!-- <depend package="drivers/orogen/camera_firewire" /> -->
   <depend package="perception/frame_helper" />
 
 </package>
